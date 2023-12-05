@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <button onclick="updateUserData()">Download</button>
+    <h2>Success</h2>
+    <div id="userData">
+
+    </div>
+
+    <script>
+    function fetchRandomUserData() {
+      const url = 'https://randomuser.me/api?results=5';
+
+      return fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          return data;
+        })
+        .catch(error => {
+          throw error;
+        });
+    }
+
+    function updateUserData() {
+      fetchRandomUserData()
+        .then(data => {
+          var userDataDiv = document.getElementById('userData');
+          var userDataHTML = '';
+          
+          for (var step = 0; step < 5; step++) {
+            userDataHTML += '<div class="userContainer">';
+            userDataHTML += '<img src="' + data.results[step].picture.large + '">';
+            userDataHTML += '<p>Name: ' + data.results[step].name.title + ' ' + data.results[step].name.first + ' ' + data.results[step].name.last + '</p>';
+            userDataHTML += '<p>City: ' + data.results[step].location.city + '</p>';
+            userDataHTML += '<p>Country: ' + data.results[step].location.country + '</p>';
+            userDataHTML += '<p>Postcode: ' + data.results[step].location.postcode + '</p>';
+            userDataHTML += '</div>';
+          }
+          
+          userDataDiv.innerHTML = userDataHTML;
+        })
+        .catch(error => {
+          console.error('Помилка під час отримання даних:', error);
+        });
+    }
+
+    updateUserData();
+  </script>
+</body>
+</html>
